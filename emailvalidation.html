@@ -13,23 +13,29 @@
 <body>
     <form onsubmit="return validateEmail()">
         <label for="email">Email:</label>
-         <input type="email" id="email" name="email">
-         <span id="hint">write your valid email as (studentofaiub.com)</span>
+        <input type="email" id="email" name="email">
+        <span id="hint">write your valid email as (studentofaiub.com)</span>
         <p id="error"></p>
         <input type="submit" value="Submit">
     </form>
     <script>
         function validateEmail() {
             let email = document.getElementById('email').value;
-             let error = document.getElementById('error');
-            let regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            let error = document.getElementById('error');
+
             if (email === "") {
-                error.textContent = " you can't submit when you have no email !";
-                return false;
-            } else if (!regex.test(email)) {
-                error.textContent = " email format is invalid !";
+                error.textContent = "You can't submit when you have no email!";
                 return false;
             }
+
+            let atPosition = email.indexOf('@');
+            let dotPosition = email.lastIndexOf('.');
+
+            if (atPosition < 1 || dotPosition < atPosition + 2 || dotPosition + 2 >= email.length) {
+                error.textContent = "Email format is invalid!";
+                return false;
+            }
+
             return true;
         }
     </script>
