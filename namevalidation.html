@@ -14,17 +14,39 @@
         function validateName() {
             let name = document.getElementById('name').value;
             let error = document.getElementById('error');
-            let regex = /^[A-Za-z][A-Za-z.-]*\s[A-Za-z.-]+$/;
             error.textContent = '';
 
             if (name === "") {
                 alert("Name cannot be empty!");
                 error.textContent = "Name cannot be empty!";
                 return false;
-            } else if (!regex.test(name)) {
-                alert("Invalid name format!");
-                error.textContent = "Invalid name format!";
+            }
+
+            let nameParts = name.trim().split(" ");
+            if (nameParts.length !== 2) {
+                alert("you don't write your full name");
+                error.textContent = "please write your full name !";
                 return false;
+            }
+
+            let firstName = nameParts[0];
+            let lastName = nameParts[1];
+
+            if (!isValidNamePart(firstName) || !isValidNamePart(lastName)) {
+                alert("Invalid name format!");
+                error.textContent = "Invalid format !";
+                return false;
+            }
+
+            return true;
+        }
+
+        function isValidNamePart(namePart) {
+            for (let i = 0; i < namePart.length; i++) {
+                let char = namePart[i];
+                if (!((char >= 'A' && char <= 'Z') || (char >= 'a' && char <= 'z') || char === '.' || char === '-')) {
+                    return false;
+                }
             }
             return true;
         }
