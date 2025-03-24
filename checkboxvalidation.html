@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Checkbox Validation</title>
+</head>
+<body>
+    <form onsubmit="return validateCheckbox()">
+        <fieldset>
+        <legend>Gender</legend>
+            <label><input type="checkbox" id="male"> Male</label>
+            <label><input type="checkbox" id="female"> Female</label>
+            <label><input type="checkbox" id="others"> Others</label>
+            <p id="error" style="color: red;"></p>
+        </fieldset>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <script>
+        function validateCheckbox() {
+            if (!document.getElementById('male').checked && !document.getElementById('female').checked && !document.getElementById('others').checked) {
+                document.getElementById('error').textContent = "At least one option must be selected!";
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>
