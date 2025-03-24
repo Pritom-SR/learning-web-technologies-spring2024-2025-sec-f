@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login Page</title>
+</head>
+<body>
+    <h1 id="head">Login</h1>
+    
+    <input type="text" id="username" name="username" value="" onblur="test()" placeholder="Username" />
+    <input type="password" id="password" name="password" value="" onblur="test()" placeholder="Password" />
+    <input type="button" id="button" name="button" value="Login" onclick="test()"/>
+    <p id="error"></p>
+
+    <h2 id="displayUsername"></h2>
+    <h2 id="displayPassword"></h2>
+
+    <script>
+        function test (){
+            let username = document.getElementById('username').value;
+            let password = document.getElementById('password').value;
+            let error = document.getElementById('error');
+            
+            if(username == "" || password == ""){
+                error.innerHTML = "Please fill in both fields!";
+                error.style.color = 'red';
+                document.getElementById('displayUsername').innerHTML = "";
+                document.getElementById('displayPassword').innerHTML = "";
+            }else{
+                document.getElementById('displayUsername').innerHTML = "Username: " + username;
+                document.getElementById('displayPassword').innerHTML = "Password: " + password;
+                error.innerHTML = "";
+            }
+        }
+    </script>
+</body>
+</html>
