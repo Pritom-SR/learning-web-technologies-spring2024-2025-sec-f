@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    .branding {
+      padding: 20px 32px;
+      font-size: 28px;
+      font-weight: bold;
+      color: #0061FF;
+    }
+
+    h2 {
+      text-align: center;
+      color: #0061FF;
+      margin-top: 10px;
+    }
+
+    form {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #ffffff;
+      padding: 32px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    fieldset {
+      border: none;
+      padding: 0;
+    }
+
+    legend {
+      font-weight: bold;
+      font-size: 22px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    td {
+      padding: 12px 0;
+      vertical-align: top;
+    }
+
+    label {
+      font-weight: bold;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      font-size: 14px;
+      border: 2px solid #c4c4c4;
+      border-radius: 4px;
+      padding: 12px 16px;
+      width: 100%;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    textarea:focus {
+      border-color: #0061FF;
+      outline: none;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .button-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    input[type="submit"],
+    input[type="reset"] {
+      font-size: 16px;
+      font-weight: 600;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"] {
+      background-color: #0061FF;
+      color: white;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #0051D4;
+    }
+
+    input[type="reset"] {
+      background-color: #f44336;
+      color: white;
+    }
+
+    input[type="reset"]:hover {
+      background-color: #d32f2f;
+    }
+  </style>
+</head>
+<body>
+
+
+<div class="branding">CareerSphere</div>
+
+<h2>Contact Us</h2>
+
+<form>
+  <fieldset>
+    <legend>Contact Information</legend>
+    <table>
+      <tr>
+        <td><label for="fullname">Full Name</label></td>
+        <td><input type="text" id="fullname" name="fullname" required /></td>
+      </tr>
+      <tr>
+        <td><label for="email">Email</label></td>
+        <td><input type="email" id="email" name="email" required /></td>
+      </tr>
+      <tr>
+        <td><label for="message">Message</label></td>
+        <td><textarea id="message" name="message" rows="4" required></textarea></td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <div class="button-row">
+            <input type="reset" value="Reset" />
+            <input type="submit" value="Submit" />
+          </div>
+        </td>
+      </tr>
+    </table>
+  </fieldset>
+</form>
+
+<script src="../../scripts/contact_us/contact_us.js"></script>
+</body>
+</html>

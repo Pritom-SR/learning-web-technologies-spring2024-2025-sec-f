@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Speed Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Press Start 2P', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+            text-align: center;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 1.4rem;
+        }
+
+        #text-display {
+            background-color: #e5e5e5;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            min-height: 80px;
+            text-align: left;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        #text-input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        #text-input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        #results {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        #results p {
+            margin-bottom: 10px;
+        }
+
+        #restart-btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        #restart-btn:hover {
+            background-color: #0056b3;
+        }
+
+        #highlight-correct {
+            color: green;
+        }
+
+        #highlight-incorrect {
+            color: red;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                width: 95%;
+            }
+            h1{
+                font-size: 1.2rem;
+            }
+            #text-display{
+                font-size: 0.9rem;
+                min-height: 60px;
+            }
+            #text-input{
+                font-size: 0.9rem;
+            }
+            #results{
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Typing Speed Test</h1>
+        <div id="text-display"></div>
+        <input type="text" id="text-input" placeholder="Start typing here...">
+        <div id="results" style="display: none;">
+            <p>Words Per Minute (WPM): <span id="wpm">0</span></p>
+            <p>Accuracy: <span id="accuracy">0</span>%</p>
+            <p>Time Taken: <span id="time">0</span> seconds</p>
+            <button id="restart-btn">Retry</button>
+        </div>
+    </div>
+
+    <script>
+        const textDisplay = document.getElementById('text-display');
+        const textInput = document.getElementById('text-input');
+        const resultsDisplay = document.getElementById('results');
+        const wpmDisplay = document.getElementById('wpm');
+        const accuracyDisplay = document.getElementById('accuracy');
+        const timeDisplay = document.getElementById('time');
+        const restartBtn = document.getElementById('restart-btn');
+
+        const passages = [
+            "The quick brown fox jumps over the lazy dog.",
+            "A journey of a thousand miles begins with a single step.",
+            "The only way to do great work is to love what you do.",
+            "All that glitters is not gold.",
+            "To be or not to be, that is the question."
+        ];
+
+        let startTime;
+        let text = '';
+        let correctChars = 0;
+        let totalChars = 0;
+        let isTestRunning = false;
+        let typedText = '';
+
+        // --- Sound Effects ---
+        const correctSound = new Audio('https://www.soundjay.com/buttons/sounds/beep-01a.mp3'); // Replace with actual sound file URLs
+        const incorrectSound = new Audio('https://www.soundjay.com/buttons/sounds/beep-001a.mp3');
+        const finishSound = new Audio('https://www.soundjay.com/buttons/sounds/applause-01.mp3');
+        const typeSound = new Audio('https://www.soundjay.com/buttons/sounds/keyboard-typing-01.mp3');
+
+        function playCorrectSound() {
+            correctSound.currentTime = 0; // Reset to start
+            correctSound.play();
+        }
+
+        function playIncorrectSound() {
+            incorrectSound.currentTime = 0;
+            incorrectSound.play();
+        }
+
+        function playFinishSound() {
+            finishSound.currentTime = 0;
+            finishSound.play();
+        }
+
+        function playTypeSound() {
+            typeSound.currentTime = 0;
+            typeSound.play();
+        }
+        // --- End Sound Effects ---
+
+        function generateText() {
+            text = passages[Math.floor(Math.random() * passages.length)];
+            textDisplay.textContent = text;
+            textInput.value = '';
+            startTime = null;
+            correctChars = 0;
+            totalChars = 0;
+            isTestRunning = false;
+            resultsDisplay.style.display = 'none';
+            textInput.disabled = false;
+            textInput.focus();
+            typedText = '';
+        }
+
+        function startTest() {
+            if (!isTestRunning) {
+                isTestRunning = true;
+                startTime = new Date();
+                textInput.value = '';
+                correctChars = 0;
+                totalChars = 0;
+                typedText = '';
+                textDisplay.innerHTML = text; // Reset displayed text
+            }
+        }
+
+        function calculateWPM(typedText, timeInSeconds) {
+            const words = typedText.trim().split(/\s+/).filter(Boolean).length;
+            const minutes = timeInSeconds / 60;
+            return minutes > 0 ? Math.max(0, Math.floor(words / minutes)) : 0;
+        }
+
+        function calculateAccuracy(correctChars, totalChars) {
+            return totalChars === 0 ? 0 : Math.round((correctChars / totalChars) * 100);
+        }
+
+        function endGame() {
+            const endTime = new Date();
+            const timeTaken = (endTime.getTime() - startTime.getTime()) / 1000;
+            const wpm = calculateWPM(typedText, timeTaken);
+            const accuracy = calculateAccuracy(correctChars, totalChars);
+
+            wpmDisplay.textContent = wpm;
+            accuracyDisplay.textContent = accuracy;
+            timeDisplay.textContent = timeTaken.toFixed(2);
+            resultsDisplay.style.display = 'block';
+            isTestRunning = false;
+            textInput.disabled = true;
+            playFinishSound(); // Play sound on finish
+        }
+
+        function handleInput() {
+            const currentText = textInput.value;
+
+            if (!isTestRunning) {
+                startTest();
+            }
+
+            typedText = currentText;
+            totalChars++;
+
+            let expectedText = text.substring(0, currentText.length);
+            let highlightedText = '';
+
+            for (let i = 0; i < expectedText.length; i++) {
+                if (currentText[i] === expectedText[i]) {
+                    highlightedText += `<span id="highlight-correct">${expectedText[i]}</span>`;
+                    correctChars++;
+                    playTypeSound();
+                } else {
+                    highlightedText += `<span id="highlight-incorrect">${expectedText[i]}</span>`;
+                    playIncorrectSound();
+                }
+            }
+            highlightedText += text.substring(currentText.length);
+            textDisplay.innerHTML = highlightedText;
+
+
+            if (currentText === text) {
+                endGame();
+            }
+        }
+
+        textInput.addEventListener('input', handleInput);
+        restartBtn.addEventListener('click', generateText);
+
+        generateText();
+        textInput.focus();
+    </script>
+</body>
+</html>
